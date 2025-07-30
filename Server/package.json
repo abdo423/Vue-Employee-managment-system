@@ -1,0 +1,28 @@
+{
+  "name": "vue-employee-managment-system",
+  "version": "1.0.0",
+  "description": "this is a vue project for employee managment system",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abdo423/Vue-Employee-managment-system.git"
+  },
+  "author": "abdo423",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abdo423/Vue-Employee-managment-system/issues"
+  },
+  "homepage": "https://github.com/abdo423/Vue-Employee-managment-system#readme",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.17.0",
+    "zod": "^4.0.14"
+  }
+}
