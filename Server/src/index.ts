@@ -4,7 +4,9 @@ import express, { Request, Response } from "express";
 import mongoose from "mongoose";
 import config from "config";
 import authRoutes from "./routes/auth";
+import cookieParser from 'cookie-parser';
 const app = express();
+app.use(cookieParser());
 const port = config.get<number>("app.port");
 const dbConnectionString = config.get<string>("db.connectionString");
 // Connect to MongoDB

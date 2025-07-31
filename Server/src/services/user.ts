@@ -135,5 +135,18 @@ const registerUser = async (userData: IUser) => {
     }
 };
 
+
+
+export const verifyRefreshToken = (token: string) => {
+    const jwtSecret = process.env.JWT_SECRET || config.get<string>("jwt.secret");
+
+    try {
+        const decoded = jwt.verify(token, jwtSecret);
+        return decoded;
+    } catch (err) {
+        return null;
+    }
+};
+
 export { loginUser, registerUser };
 

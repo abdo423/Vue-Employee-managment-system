@@ -1,5 +1,7 @@
 import { Request, Response } from "express";
-import {loginUser, registerUser} from "../services/user";
+import {loginUser, registerUser, verifyRefreshToken} from "../services/user";
+import config from "config";
+import jwt from "jsonwebtoken";
 
 export const userLogin = async (req: Request, res: Response) => {
     try {
@@ -79,4 +81,30 @@ export const userRegister = async (req: Request, res: Response) => {
                 });
         }
     }
+};
+
+
+export const handleRefreshToken = (req: Request, res: Response) => {
+    const refreshToken = req.cookies?.refreshToken;
+    if (!refreshToken) return res.sendStatus(401);
+
+    const decoded = verifyRefreshToken(refreshToken);
+    if (!decoded) return res.sendStatus(403); // Invalid or expired
+
+    const jwtSecret = process.env.JWT_SECRET || config.get<string>("jwt.secret");
+
+    const newAccessToken =jwt.sign(
+        { userId: (decoded as any).userId, role: (decoded as any).role },
+        jwtSecret,
+        { expiresIn: "15m" }
+    );
+
+    res.cookie('token', newAccessToken, {
+        httpOnly: true,
+        sameSite: 'strict',
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 15 * 60 * 1000
+    });
+
+    res.sendStatus(200); // Frontend will retry original request
 };

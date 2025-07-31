@@ -1,15 +1,10 @@
 import express from "express";
-import {userLogin, userRegister} from "../controllers/user";
+import {handleRefreshToken, userLogin, userRegister} from "../controllers/user";
 
 const router = express.Router();
 
-router.post('/login',
-    express.json(), // Body parser middleware
-    userLogin
-);
-router.post('/register',
-    express.json(),
-    userRegister
-);
+router.post('/login', userLogin);
+router.post('/register', userRegister);
+router.post("/refresh-token", handleRefreshToken);
 
 export default router;
