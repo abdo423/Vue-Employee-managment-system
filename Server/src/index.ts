@@ -16,7 +16,6 @@ mongoose
     .catch((err) => console.error("MongoDB connection error:", err));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-
 app.get("/", (req: Request, res: Response) => {
     res.send(`Hello from ${config.get<string>("app.name")}`);
 });
