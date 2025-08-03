@@ -89,11 +89,23 @@ export const handleRefreshToken = (req: Request, res: Response) => {
     if (!refreshToken) return res.sendStatus(401);
 
     const decoded = verifyRefreshToken(refreshToken);
-    if (!decoded) return res.sendStatus(403); // Invalid or expired
+    if (!decoded) {
+        res.clearCookie('token', {
+            httpOnly: true,
+            sameSite: 'strict',
+            secure: process.env.NODE_ENV === 'production'
+        });
+        res.clearCookie('refreshToken', {
+            httpOnly: true,
+            sameSite: 'strict',
+            secure: process.env.NODE_ENV === 'production'
+        });
+        return res.sendStatus(403);
+    }
 
     const jwtSecret = process.env.JWT_SECRET || config.get<string>("jwt.secret");
 
-    const newAccessToken =jwt.sign(
+    const newAccessToken = jwt.sign(
         { userId: (decoded as any).userId, role: (decoded as any).role },
         jwtSecret,
         { expiresIn: "15m" }
@@ -106,5 +118,5 @@ export const handleRefreshToken = (req: Request, res: Response) => {
         maxAge: 15 * 60 * 1000
     });
 
-    res.sendStatus(200); // Frontend will retry original request
+    res.sendStatus(200);
 };
